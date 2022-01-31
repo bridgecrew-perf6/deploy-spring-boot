@@ -1,0 +1,61 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        ["public", "thirdparty", "releases"].each { r ->
+            maven {
+                credentials {
+                    username nexusUserName
+                    password nexusPassword
+                }
+                url "${nexusBaseUrl}/repositories/${r}"
+            }
+        }
+    }
+    dependencies {
+        if (project.gradle.startParameter.taskNames.contains("final")) {
+            classpath "com.netflix.nebula:nebula-release-plugin:${nebulaReleasePluginVersion}"
+        }
+        classpath "com.xebialabs.gradle.plugins:gradle-xl-3rd-party-license-plugin:${xlThirdPartyLicensePluginVersion}"
+        classpath "com.xebialabs.gradle.plugins:gradle-xl-defaults-plugin:${xlDefaultsPluginVersion}"
+        classpath "gradle.plugin.com.xebialabs:gradle-xl-dependency-plugin:${xlDependencyPluginVersion}"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarQubePluginVersion}"
+
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+plugins {
+    id 'scala'
+    id 'idea'
+    id 'org.springframework.boot' version "${springBootVersion}"
+}
+
+repositories {
+    mavenLocal()
+    ["public", "thirdparty", "releases"].each { r ->
+        maven {
+            credentials {
+                username nexusUserName
+                password nexusPassword
+            }
+            url "${nexusBaseUrl}/repositories/${r}"
+        }
+    }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'scala'
+apply plugin: 'com.xebialabs.dependency'
+
+dependencyManagement {
+    importConf "com.xebialabs.xl-platform:xl-reference:${xlPlatformVersion}"
+    importConf "ai.digital.deploy.task-engine:deploy-task-engine-reference:${deployTaskEngineVersion}"
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.scala-lang:scala-library:2.13.6'
+
+    implementation "ai.digital.deploy.tasker:satellite-protocol"
+    implementation "ai.digital.deploy.tasker:tasker-akka"
+}
