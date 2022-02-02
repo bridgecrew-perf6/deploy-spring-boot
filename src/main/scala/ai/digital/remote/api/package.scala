@@ -1,7 +1,9 @@
 package ai.digital.remote
 
-import com.xebialabs.deployit.engine.tasker.TaskId
+import com.xebialabs.deployit.engine.api.execution.StepState
+import com.xebialabs.deployit.engine.tasker.{BlockPath, Description, TaskId}
 import com.xebialabs.satellite.protocol.TaskSpecificationExchange.{ArtifactType, StepType}
+import com.xebialabs.xlplatform.satellite.Satellite
 
 package object api {
   class TaskSpecificationExchangeWrapper(
@@ -27,7 +29,7 @@ package object api {
 
   }
 
-  class StartBlockWrapper(taskId: TaskId, paths: java.util.List[Int]) {
+  class StartBlockWrapper(taskId: TaskId, paths: List[Int]) {
     def this() = {
       this(null, null)
     }
@@ -37,4 +39,7 @@ package object api {
     def getPaths = paths
   }
 
+  case class BlockDoneWrapper(taskId: TaskId, bytes: Array[Byte])
+
+  case class StepBlockWrapper(id: BlockPath, description: Description, satellite: Option[Satellite], var steps: java.util.List[StepState])
 }

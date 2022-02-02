@@ -55,7 +55,9 @@ dependencyManagement {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.scala-lang:scala-library:2.13.6'
+    implementation "com.fasterxml.jackson.module:jackson-module-scala_${scalaVersion}:${jacksonVersion}"
 
     implementation "ai.digital.deploy.tasker:satellite-protocol"
     implementation "ai.digital.deploy.tasker:tasker-akka"
+    implementation "ai.digital.deploy.plugins:base-plugin"
 }
